@@ -15,5 +15,14 @@ const addFutsal = async(req,res) => {
         res.status(500).json({error:error.message});
     }
 }
+const getAllFutsals = async(req,res) => {
+    try {
+        const futsals = await Futsal.find();
+        res.status(200).json({futsals});
+    } catch (error) {
+        console.error("Error While Getting Futsal",error);
+        res.status(500).json({error:error.message});  
+    }
+}
 
-module.exports = {addFutsal};
+module.exports = {addFutsal,getAllFutsals};

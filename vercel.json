@@ -3,6 +3,7 @@
   "builds": [{ "src": "./index.js", "use": "@vercel/node" }],
   "routes": [
     { "src": "/futsal/add", "dest": "/index.js" },
+    { "src": "/futsal", "dest": "/index.js" },
     { "src": "/(.*)", "dest": "/index.js" }
   ]
 }
