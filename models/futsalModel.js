@@ -19,6 +19,10 @@ const futsalSchema = new mongoose.Schema({
         type:String,
         required:true,
         index:true
+    },
+    futsalImage:{
+        type:String
+        //URL of Cloudinary
     }
 
     
