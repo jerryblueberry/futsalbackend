@@ -7,9 +7,7 @@ const cors = require('cors');
 //  Test for cron jobs
 const cron = require('node-cron');
 
-cron.schedule('* * * * * ',() => {
-  console.log("Running Cron Job");
-})
+
 
 
 
@@ -24,8 +22,20 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
-  res.send('Welcome to my Server');
+  // res.send('Welcome to my Server');
+  res.status(200).json('Welcome to my Server');
 });
+cron.schedule('* * * * * ',async() => {
+  try {
+    const response = await axios.get('https://futsalbackend.vercel.app');
+    console.log("Cron Job Executed",response.data);
+  } catch (error) {
+    console.error("Error in Cron Jobs");
+  }
+
+ 
+})
+
 
 app.use('/futsal', Add);
 
