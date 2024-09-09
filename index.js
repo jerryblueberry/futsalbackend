@@ -1,6 +1,8 @@
 const express = require('express');
 const connectDb = require('./database/db');
 const Add = require('./routes/FutsalRoutes');
+const cors = require('cors');
+
 
 //  Test for cron jobs
 const cron = require('node-cron');
@@ -9,8 +11,14 @@ cron.schedule('* * * * * ',() => {
   console.log("Running Cron Job");
 })
 
+
+
 const app = express();
 const port = process.env.PORT || 8000;
+app.use(cors({
+  origin:true,
+  credentials:true
+}))
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
