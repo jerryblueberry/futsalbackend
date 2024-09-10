@@ -1,5 +1,7 @@
 const Futsal = require('../models/futsalModel');
 const cloudinary = require('../config/cloudinaryConfig');
+const getDataUri = require('../utils/dataUri');
+const sharp = require('sharp');
 
 // Helper function to upload to Cloudinary using stream
 const uploadToCloudinary = (buffer) => {
@@ -35,9 +37,17 @@ const addFutsal = async (req, res) => {
     if (!req.file) {
       return res.status(400).json({ message: 'No File Uploaded' });
     }
+    const file = req.file;
 
     // Upload image to Cloudinary (directly from memory buffer)
-    const result = await uploadToCloudinary(req.file.buffer);
+    // const result = await uploadToCloudinary(req.file.buffer);
+    // const fileUri = getDataUri(file);
+    // const mycloud = await cloudinary.uploader.upload(fileUri.content)
+
+    const compressedBuffer = await sharp(file.buffer)
+      .resize(800)
+      .toBuffer();
+      const result = await uploadToCloudinary(compressedBuffer);
 
     // Create new futsal entry with Cloudinary image URL
     const newFutsal = new Futsal({
@@ -61,6 +71,7 @@ const addFutsal = async (req, res) => {
 
 const getAllFutsals = async (req, res) => {
   try {
+  
     const futsals = await Futsal.find();
     res.status(200).json({ futsals });
   } catch (error) {
