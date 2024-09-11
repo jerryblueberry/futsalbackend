@@ -8,7 +8,12 @@ const uploadToCloudinary = (buffer) => {
   return new Promise((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream(
       {
-        folder: 'user_profiles', // Define the Cloudinary folder
+        folder: 'user_profiles',
+        transformation: [
+          { width: 800, crop: "scale" },  // Resize to 800px width
+          { quality: "auto" },            // Automatically adjust quality
+
+        ], 
       },
       (error, result) => {
         if (error) {
@@ -28,28 +33,27 @@ const addFutsal = async (req, res) => {
   try {
     const { name, price, address, description } = req.body;
 
-    // Ensure all required fields are provided
     if (!name || !price || !address) {
       return res.status(400).json({ message: 'Required fields are missing!' });
     }
 
-    // Check if file is uploaded
     if (!req.file) {
       return res.status(400).json({ message: 'No File Uploaded' });
     }
+
     const file = req.file;
 
-    // Upload image to Cloudinary (directly from memory buffer)
-    // const result = await uploadToCloudinary(req.file.buffer);
-    // const fileUri = getDataUri(file);
-    // const mycloud = await cloudinary.uploader.upload(fileUri.content)
-
+    console.time("Image Processing");
     const compressedBuffer = await sharp(file.buffer)
-      .resize(800)
+      .resize(800) // Resize the image to a max width of 800px
+      .jpeg({ quality: 50 }) 
       .toBuffer();
-      const result = await uploadToCloudinary(compressedBuffer);
+    console.timeEnd("Image Processing");
 
-    // Create new futsal entry with Cloudinary image URL
+    console.time("Cloudinary Upload");
+    const result = await uploadToCloudinary(compressedBuffer);
+    console.timeEnd("Cloudinary Upload");
+
     const newFutsal = new Futsal({
       name,
       price,
@@ -58,16 +62,14 @@ const addFutsal = async (req, res) => {
       futsalImage: result.secure_url,
     });
 
-    // Save Futsal entry to MongoDB
     const savedFutsal = await newFutsal.save();
-
-    // Send success response
     res.status(200).json({ savedFutsal });
   } catch (error) {
     console.error('Error While Adding Futsal:', error);
     res.status(500).json({ error: error.message });
   }
 };
+
 
 const getAllFutsals = async (req, res) => {
   try {
