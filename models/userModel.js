@@ -16,7 +16,14 @@ const userSchema = new mongoose.Schema({
     },
     refreshToken:{
         type:String,
+    },
+    profileImage:{
+        type:String
     }
+    //  profile Image doesn't need to be required 
+    // Initial Register Includes Avatar with user Name front letter
+    // Later they can add photo from their profile section
+    //  To save register time 
 })
 
 userSchema.index({name:'text',email:'text'});
