@@ -1,6 +1,7 @@
 const express = require('express');
 const connectDb = require('./database/db');
 const Add = require('./routes/FutsalRoutes');
+const User = require('./routes/userRoutes');
 const cors = require('cors');
 const axios = require('axios');
 //  Test for cron jobs
@@ -37,6 +38,7 @@ cron.schedule('* * * * * ',async() => {
 
 
 app.use('/futsal', Add);
+app.use('/user',User)
 
 // Connect to database and start the server
 connectDb().then(() => {
