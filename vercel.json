@@ -7,7 +7,7 @@
     { "src": "/user/:userId", "dest": "/index.js" },
     { "src": "/user/register", "dest": "/index.js" },
     { "src": "/user/login", "dest": "/index.js" },
-    { "src": "/user/refres-token", "dest": "/index.js" },
+    { "src": "/user/refresh-token", "dest": "/index.js" },
     { "src": "/user/image/:userId", "dest": "/index.js" },
 
     { "src": "/(.*)", "dest": "/index.js" }

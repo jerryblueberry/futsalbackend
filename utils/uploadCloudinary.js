@@ -9,7 +9,7 @@ const uploadCloudinary = (buffer) => {
         folder: 'user_profiles',
         transformation: [
           { width: 100, height: 100, crop: 'scale' },
-          { quality: 'auto' }
+          { quality: 'auto' ,fetch_format:'auto'}
         ],
       },
       (error, result) => {
